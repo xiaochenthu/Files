@@ -113,3 +113,6 @@ jobs:
       with:
         name: MSIX Package
         path: ${{ env.Wap_Project_Directory }}\AppPackages
+        
+    - name: Install Visual C++ Build Tools
+      uses: microsoft/setup-msvc@v1.8.2
