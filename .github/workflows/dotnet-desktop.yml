@@ -114,5 +114,25 @@ jobs:
         name: MSIX Package
         path: ${{ env.Wap_Project_Directory }}\AppPackages
         
-    - name: Install Visual C++ Build Tools
-      uses: microsoft/setup-msvc@v1.8.2
+     # MSVC
+    - name: Setup MSVC Developer Command Prompt
+  # You may pin to the exact commit or the version.
+  # uses: TheMrMilchmann/setup-msvc-dev@48edcef51a12c80d7e62ace57aae1417795e511c
+      uses: TheMrMilchmann/setup-msvc-dev@v3.0.0
+      with:
+    # The target architecture
+       arch: # optional
+    # The path to the Visual Studio installation
+       vs-path: # optional
+    # Windows SDK to use
+       sdk: # optional
+    # Use Visual Studio libraries with Spectre mitigations
+       spectre: # optional
+    # VC++ compiler toolset version
+       toolset: # optional
+    # Build for Universal Windows Platform
+       uwp: # optional
+    # The environment variable to store the path to vcvarsall.bat in
+       export-path-to-vcvarsall: # optional
+    # The environment variable to store the path to the Visual Studio installation in
+       export-path-to-vs: # optional
