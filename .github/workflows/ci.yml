@@ -225,6 +225,65 @@ jobs:
           $env:AUTOMATED_TESTS_ASSEMBLY_DIR\**\Files.InteractionTests.dll `
           --logger "trx;LogFileName=$env:AUTOMATED_TESTS_ASSEMBLY_DIR\testResults.trx"
 
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [build]
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [Release]
+        platform: [x64]
+    env:
+      CONFIGURATION: ${{ matrix.configuration }}
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+
+      - if: contains(join(needs.*.result, ','), 'failure')
+        name: Fail if necessary
+        run: exit 1
+
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Download the packages from the Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: 'Appx Packages (${{ env.CONFIGURATION }}, ${{ env.AUTOMATED_TESTS_ARCHITECTURE }})'
+          path: ${{ env.ARTIFACTS_STAGING_DIR }}
+
+      - name: Install Files
+        shell: powershell
+        run: |
+          Set-Location "$env:APPX_PACKAGE_DIR"
+          $AppxPackageBundleDir = Get-ChildItem -Filter Files.Package_*_Test -Name
+          Set-Location $AppxPackageBundleDir
+          ./Install.ps1 -Force
+          Get-AppxPackage
+
+      - name: Set full HD resolution
+        run: Set-DisplayResolution -Width 1920 -Height 1080 -Force
+
+      - name: Start WinAppDriver process
+        shell: pwsh
+        run: Start-Process -FilePath "$env:WINAPPDRIVER_EXE86_PATH"
+
+      - name: Run interaction tests
+        run: |
+          dotnet test `
+            $env:AUTOMATED_TESTS_ASSEMBLY_DIR\**\Files.InteractionTests.dll `
+            --logger "trx;LogFileName=$env:AUTOMATED_TESTS_ASSEMBLY_DIR\testResults.trx"
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ${{ env.ARTIFACTS_STAGING_DIR }}\AppxPackages\Files.Package_*_Test\AppxPackages\Files.Package_*_Test_*.appxbundle
+            ${{ env.ARTIFACTS_STAGING_DIR }}\AppxPackages\Files.Package_*
+
     # - name: Generate markdown from the tests result
     #   shell: pwsh
     #   run: |
