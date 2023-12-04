@@ -250,7 +250,7 @@ jobs:
   release:
     name: Release APP
     needs: [build]
-    if: startsWith(github.ref, 'refs/tags/')
+    if: always()
     runs-on: ubuntu-latest
     steps:
        - name: Download the packages from the Artifacts
