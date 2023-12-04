@@ -256,7 +256,7 @@ jobs:
        - name: Download the packages from the Artifacts
          uses: actions/download-artifact@v3
          with:
-           name: APP
+           name: 'Appx Packages (${{ env.CONFIGURATION }}, ${{ env.AUTOMATED_TESTS_ARCHITECTURE }})'
        - name: Display structure of downloaded files
          run: ls -R
 
