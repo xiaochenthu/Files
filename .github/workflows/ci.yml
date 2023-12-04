@@ -294,6 +294,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/artifacts/AppxPackages/*.appx
+          asset_path: ${{ github.workspace }}/artifacts/*.appx
           asset_name: Files.Package.appx
           asset_content_type: application/vnd.ms-appx
