@@ -248,24 +248,36 @@ jobs:
          path: '${{ env.AUTOMATED_TESTS_ASSEMBLY_DIR }}\testResults.md'
 
            
-    - name: Display structure of downloaded files
-      run: ls -R
+  publish-release:
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1.1.4
-      env:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: 'Appx Packages (${{ env.CONFIGURATION }}, ${{ env.AUTOMATED_TESTS_ARCHITECTURE }})'
+          path: ${{ env.ARTIFACTS_STAGING_DIR }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
+        with:
           tag_name: v1.0
-          release_name: v1.0
-    - name: Upload Release APP
-      id: upload_release_asset
-      uses: actions/upload-release-asset@v1.0.1
-      env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
+          release_name: Release v1.0
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./files.appx
-          asset_name: files.appx
-          asset_content_type: application/zip
+          asset_path: ${{ github.workspace }}/artifacts/AppxPackages/*.appx
+          asset_name: Files.Package.appx
+          asset_content_type: application/vnd.ms-appx
