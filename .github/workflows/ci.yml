@@ -280,7 +280,7 @@ jobs:
         
     - name: List contents of the artifacts directory
       run: |
-        $path = "D:\a\Files\Files\artifacts"
+        $path = "D:\a\Files\Files\artifacts\AppxPackages"
         Get-ChildItem -Path $path
       shell: pwsh
 
