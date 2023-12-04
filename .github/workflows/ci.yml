@@ -277,6 +277,14 @@ jobs:
         name: 'Appx Packages (${{ env.CONFIGURATION }}, ${{ env.AUTOMATED_TESTS_ARCHITECTURE }})'
         path: ${{ env.ARTIFACTS_STAGING_DIR }}
 
+        
+    - name: List contents of the artifacts directory
+      run: |
+        $path = "D:\a\Files\Files\artifacts"
+        Get-ChildItem -Path $path
+      shell: pwsh
+
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -294,6 +302,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}/artifacts/*.appx
+          asset_path: ${{ github.workspace }}\artifacts\*.appx
           asset_name: Files.Package.appx
           asset_content_type: application/vnd.ms-appx
