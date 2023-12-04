@@ -284,6 +284,8 @@ jobs:
         Get-ChildItem -Path $path
       shell: pwsh
 
+    - name: Compress Files
+      run: Compress-Archive -Path D:\a\Files\Files\artifacts\AppxPackages\Files.Package_3.0.15.0_Test -DestinationPath package.zip
 
     - name: Create Release
       id: create_release
@@ -302,6 +304,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}\artifacts\AppxPackages\Files.Package_3.0.15.0_Test
-          asset_name: Files.Package.appx
-          asset_content_type: application/vnd.ms-appx
+          asset_path: ./package.zip
+          asset_name: package.zip
+          asset_content_type: application/zip
