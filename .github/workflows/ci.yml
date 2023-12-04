@@ -247,36 +247,25 @@ jobs:
          header: test-result
          path: '${{ env.AUTOMATED_TESTS_ASSEMBLY_DIR }}\testResults.md'
 
-  release:
-    name: Release APP
-    needs: [build]
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-       - name: Download the packages from the Artifacts
-         uses: actions/download-artifact@v3
-         with:
-           name: 'Appx Packages (${{ env.CONFIGURATION }}, ${{ env.AUTOMATED_TESTS_ARCHITECTURE }})'
-           path: ${{ env.ARTIFACTS_STAGING_DIR }}
            
-       - name: Display structure of downloaded files
-         run: ls -R
+    - name: Display structure of downloaded files
+      run: ls -R
 
-       - name: Create Release
-         id: create_release
-         uses: actions/create-release@v1.1.4
-         env:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1.1.4
+      env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-         with:
+      with:
           tag_name: v1.0
           release_name: v1.0
-       - name: Upload Release APP
-         id: upload_release_asset
-         uses: actions/upload-release-asset@v1.0.1
-         env:
+    - name: Upload Release APP
+      id: upload_release_asset
+      uses: actions/upload-release-asset@v1.0.1
+      env:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-         with:
+      with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./files.exe
-          asset_name: files.exe
+          asset_path: ./files.appx
+          asset_name: files.appx
           asset_content_type: application/zip
