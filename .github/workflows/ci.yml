@@ -171,7 +171,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: 'Appx Packages (${{ env.CONFIGURATION }}, ${{ env.ARCHITECTURE }})'
-        path: ${{ env.ARTIFACTS_STAGING_DIR }}
+        path: bin/Release/netcoreapp3.1/publish/
 
   test:
     if: always()
