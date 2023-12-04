@@ -302,6 +302,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ github.workspace }}\artifacts\Files.Package_*_Test
+          asset_path: ${{ github.workspace }}\artifacts\Files.Package_3.0.15.0_Test
           asset_name: Files.Package.appx
           asset_content_type: application/vnd.ms-appx
