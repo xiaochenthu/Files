@@ -257,6 +257,8 @@ jobs:
          uses: actions/download-artifact@v3
          with:
            name: 'Appx Packages (${{ env.CONFIGURATION }}, ${{ env.AUTOMATED_TESTS_ARCHITECTURE }})'
+           path: ${{ env.ARTIFACTS_STAGING_DIR }}
+           
        - name: Display structure of downloaded files
          run: ls -R
 
@@ -268,13 +270,13 @@ jobs:
          with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
-       - name: Upload Release APK
+       - name: Upload Release APP
          id: upload_release_asset
          uses: actions/upload-release-asset@v1.0.1
          env:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app-release.apk
-          asset_name: app-release.apk
+          asset_path: ./app-release.exe
+          asset_name: app-release.exe
           asset_content_type: application/zip
